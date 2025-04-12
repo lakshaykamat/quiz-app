@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import QuizCard from "./QuizCard/QuizCard";
 import styles from "./QuizSection.module.css";
+import QuizCard from "../QuizCard/QuizCard";
 
 const QuizSection: React.FC = () => {
   const quizzes = [
