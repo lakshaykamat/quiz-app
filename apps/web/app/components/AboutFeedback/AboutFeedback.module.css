@@ -1,0 +1,28 @@
+.section {
+    padding: 4rem 1rem;
+    background-color: #ffffff;
+    text-align: center;
+  }
+  
+  .heading {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 1.5rem;
+  }
+  
+  .text {
+    font-size: 1rem;
+    color: #374151;
+    max-width: 700px;
+    margin: 0 auto 2rem auto;
+    line-height: 1.6;
+  }
+  
+  .feedbackLink {
+    font-size: 1rem;
+    color: #4f46e5;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  

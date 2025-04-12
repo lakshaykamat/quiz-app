@@ -1,0 +1,40 @@
+.section {
+    padding: 4rem 1rem;
+    background-color: #ffffff;
+    text-align: center;
+  }
+  
+  .heading {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 2rem;
+  }
+  
+  .statsGrid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+  }
+  
+  .statCard {
+    background-color: #f3f4f6;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    width: 200px;
+    text-align: center;
+  }
+  
+  .statNumber {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #4f46e5;
+    margin-bottom: 0.5rem;
+  }
+  
+  .statLabel {
+    font-size: 1rem;
+    color: #374151;
+  }
+  

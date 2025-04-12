@@ -1,0 +1,81 @@
+.navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 4rem;
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #4f46e5;
+    text-decoration: none;
+  }
+  
+  .navLinks {
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .link {
+    color: #374151;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .link:hover {
+    color: #4f46e5;
+  }
+  
+  .mobileMenuButton {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .icon {
+    width: 24px;
+    height: 24px;
+    color: #374151;
+  }
+  
+  .mobileMenu {
+    display: none;
+    flex-direction: column;
+    padding: 0.5rem 1rem;
+  }
+  
+  .mobileLink {
+    padding: 0.75rem 0;
+    text-decoration: none;
+    color: #374151;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  
+  .mobileLink:hover {
+    color: #4f46e5;
+  }
+  
+  @media (max-width: 768px) {
+    .navLinks {
+      display: none;
+    }
+    .mobileMenuButton {
+      display: block;
+    }
+    .mobileMenu {
+      display: flex;
+    }
+  }
+  
