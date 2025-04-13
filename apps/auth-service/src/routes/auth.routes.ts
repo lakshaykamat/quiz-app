@@ -3,9 +3,8 @@ import { signup, login, getProfile } from '../controllers/auth.controller';
 import { authenticate } from '../middlewares/auth.middleware';
 
 const router = express.Router();
-
 router.post('/signup', signup);
 router.post('/login', login);
-router.get('/profile', authenticate,getProfile);
+router.get('/me', authenticate,getProfile);
 
 export default router;

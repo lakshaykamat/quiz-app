@@ -4,7 +4,7 @@ import { JwtPayload } from 'jsonwebtoken';
 
 export const signup = async (req: Request, res: Response) => {
   try {
-    const user = authService.signup(req.body);
+    const user = await authService.signup(req.body);
     res.status(201).json(user);
   } catch (err) {
     if (err instanceof Error) {
@@ -28,7 +28,15 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-export const getProfile = async (req: Request, res: Response) => {
-  const user = await authService.getUserProfile((req.user as JwtPayload).userId);
-  res.json(user);
+export const getProfile = async (req: any, res: Response):Promise<void> => {
+  try {
+    if (!req.user || !req.user.id) {
+      res.status(401).json({ message: 'Unauthorized' });
+    }
+    const user = await authService.getUserProfile((req.user as JwtPayload).id);
+    res.status(200).json(user);
+} catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+}
+  
 };

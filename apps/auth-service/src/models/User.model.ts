@@ -4,17 +4,25 @@ import mongoose from 'mongoose';
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    min: [3, 'Name must be at least 3 characters'],
+    max: [50, 'Name must be at most 50 characters']
   },
   email: {
     type: String,
     required: true,
     unique: true,
+    min: [5, 'Email must be at least 5 characters'],
+    max: [100, 'Email must be at most 100 characters'],
+    lowercase: true,
     match: [/.+@.+\..+/, 'Please enter a valid email address']
   },
   password: {
     type: String,
-    required: true
+    required: true,
+    select: false, // Do not return password by default
+    min:[6, 'Password must be at least 6 characters'],
+    max:[20, 'Password must be at most 20 characters']
   },
   avatarUrl: {
     type: String,
