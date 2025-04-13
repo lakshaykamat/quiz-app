@@ -2,6 +2,7 @@ import * as repo from '../repositories/user.repository'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { User } from '../models/User.model'
+import mongoose from 'mongoose'
 
 const JWT_SECRET = process.env.JWT_SECRET!
 
@@ -11,12 +12,17 @@ export const signup = async(userData:User)=>{
         throw new Error('Password is required');
     }
     const hashedPassword = await bcrypt.hash(password, 10)
-    const user = await repo.createUser({ 
-        name, 
-        email, 
-        password: hashedPassword, 
-        createdAt: new Date(), 
-        updatedAt: new Date() 
+    const user = await repo.createUser({
+        name,
+        email,
+        password: hashedPassword,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        avatarUrl: 'https://avatar.iran.liara.run/public',
+        bio: '',
+        role: 'user',
+        quizzesTaken: new mongoose.Types.DocumentArray([]),
+        isEmailVerified: false
     })
     return user
 }

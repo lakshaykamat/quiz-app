@@ -1,29 +1,28 @@
 import React from 'react'
-import Navbar from './components/Navbar/Navbar'
-import Hero from './components/Hero/Hero'
-import LiveStats from './components/LiveStats/LiveStats'
-import Leaderboard from './components/Leaderboard/Leaderboard'
-import Achievements from './components/Achievements/Achievements'
-import Resources from './components/Resources/Resources'
-import Newsletter from './components/Newsletter/Newsletter'
-import AboutFeedback from './components/AboutFeedback/AboutFeedback'
-import QuizSection from './components/QuizSection/QuizSection'
-
+import { Button } from "@/components/ui/button"
+import Navbar from './components/Navbar'
+import HeroSection from './components/HeroSection'
+import QuizCardsSection from './components/QuizCardSection'
+import LiveStatsSection from './components/LiveStatsSection'
+import LeaderboardSection from './components/LeaderboardSection'
+import NewsletterSection from './components/NewsLetterSection'
+import Footer from './components/Footer'
+import AchievementsSection from './components/AchievementSection'
 type Props = {}
 
 const HomePage = (props: Props) => {
   return (
-    <div>
-    <Navbar />
-    <Hero/>
-    <QuizSection/>
-    <LiveStats/>
-    <Leaderboard/>
-    <Achievements/>
-    <Resources/>
-    <Newsletter/>
-    <AboutFeedback/>
-  </div>
+    <>
+    <Navbar/>
+    <HeroSection/>
+    <QuizCardsSection/>
+    <hr />
+    <LiveStatsSection/>
+    <LeaderboardSection/>
+    <NewsletterSection/>
+    <AchievementsSection/>
+    <Footer/>
+    </>
   )
 }
 
