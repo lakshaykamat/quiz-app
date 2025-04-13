@@ -12,17 +12,17 @@ type Props = {}
 
 const HomePage = (props: Props) => {
   return (
-    <>
-    <Navbar/>
+    <div>
     <HeroSection/>
     <QuizCardsSection/>
     <hr />
     <LiveStatsSection/>
     <LeaderboardSection/>
+    <hr />
     <NewsletterSection/>
     <AchievementsSection/>
     <Footer/>
-    </>
+    </div>
   )
 }
 
