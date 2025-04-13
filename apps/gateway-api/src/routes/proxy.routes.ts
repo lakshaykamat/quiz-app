@@ -6,8 +6,10 @@ const router = express.Router();
 
 // Auth routes (no auth middleware here)
 router.use('/api/v1/auth', createProxyMiddleware({
-  target: 'http://localhost:4001',
-  changeOrigin: true
+  target: 'http://127.0.0.1:4001',
+  changeOrigin: true,
+  //@ts-ignore
+  logLevel: 'debug'
 }));
 
 // Quiz routes (authenticated)
