@@ -3,11 +3,13 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { User } from '../models/User.model'
 import mongoose from 'mongoose'
-
-const JWT_SECRET = "dj}h%XQt}&{2KhH"
+import { publishUserRegistered } from '../events/publishers/userPublisher'
 
 export const signup = async(userData:User)=>{
     const { name,email,password} = userData
+    if(!email){
+        throw new Error('Email is required')
+    }
     if (!password) {
         throw new Error('Password is required');
     }
@@ -27,6 +29,7 @@ export const signup = async(userData:User)=>{
     if (!/^[a-zA-Z0-9]+$/.test(name)) {
         throw new Error('Name must contain only letters and numbers')
     }
+    await publishUserRegistered({ name, email });
     const hashedPassword = await bcrypt.hash(password, 10)
     const user = await repo.createUser({
         name,
@@ -40,6 +43,7 @@ export const signup = async(userData:User)=>{
         quizzesTaken: new mongoose.Types.DocumentArray([]),
         isEmailVerified: false
     })
+    
     return user
 }
 
@@ -53,13 +57,10 @@ export const login = async(email:string,password:string)=>{
     if(!valid){
         throw new Error("Invalid email or password")
     }
-    //TODO Bad practice to use user id as payload, use a random string instead
-    //TODO use a better secret key and store it in an env variable
-    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '7d' })
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!, { expiresIn: '7d' })
     return { token, user }
 }
 
 export const getUserProfile = async (userId: string) => {
     return await repo.findUserById(userId);
 };
-
