@@ -11,6 +11,11 @@ const quizSchema = new Schema(
       minlength: [3, 'Title must be at least 3 characters long.'],
       maxlength: [100, 'Title cannot exceed 100 characters.'],
     },
+    imageUrl: {
+      type: String,
+      trim: true,
+      default:'/quiz.png'
+    },
     description: {
       type: String,
       trim: true,
@@ -25,9 +30,7 @@ const quizSchema = new Schema(
       enum: {
         values: [Difficulty.Easy, Difficulty.Medium, Difficulty.Hard],
         message: 'Difficulty must be one of: easy, medium, or hard.',
-      },
-      default: Difficulty.Medium,
-      required: [true, 'Difficulty is required.'],
+      }
     },
     questionIds: [
       {

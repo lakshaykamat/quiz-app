@@ -3,9 +3,7 @@ import mongoose, { Schema, model, InferSchemaType } from 'mongoose';
 // Enums
 export enum QuestionType {
   MCQ = 0,
-  Code = 1,
   Boolean = 2,
-  Text = 3,
 }
 
 export enum Difficulty {
@@ -20,7 +18,7 @@ const questionSchema = new Schema(
     type: {
       type: Number,
       enum: {
-        values: [QuestionType.MCQ, QuestionType.Code, QuestionType.Boolean, QuestionType.Text],
+        values: [QuestionType.MCQ, QuestionType.Boolean],
         message: 'Type must be one of: mcq, code, boolean, or text.',
       },
       default: QuestionType.MCQ,
@@ -67,6 +65,12 @@ const questionSchema = new Schema(
     tags: {
       type: [String],
       default: [],
+      validate: {
+        validator: function (tags: string[]) {
+          return tags.length <= 3;
+        },
+        message: 'Tags can have a maximum of 3 items.',
+      },
     },
   },
   {
