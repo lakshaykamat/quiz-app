@@ -1,27 +1,46 @@
-import express from 'express';
-import { createProxyMiddleware } from 'http-proxy-middleware';
-import { authenticate } from '../middlewares/auth.middleware';
+import { Router } from "express";
+import dotenv from "dotenv";
+import { createProxyMiddleware } from "http-proxy-middleware";
+dotenv.config();
+const router = Router();
 
-const router = express.Router();
+// Auth Service
+router.use(
+  "/api/v1/auth",
+  createProxyMiddleware({
+    target: process.env.AUTH_SERVICE_URL,
+    changeOrigin: true,
+    pathRewrite: { "^/api/v1/auth": "" },
+  })
+);
 
-// Auth routes (no auth middleware here)
-router.use('/api/v1/auth', createProxyMiddleware({
-  target: 'http://127.0.0.1:4001',
-  changeOrigin: true,
-  //@ts-ignore
-  logLevel: 'debug'
-}));
+router.use(
+  "/api/v1/submission",
+  createProxyMiddleware({
+    target: process.env.SUBMISSION_SERVICE_URL,
+    changeOrigin: true,
+    pathRewrite: { "^/api/v1/submission": "" },
+  })
+);
 
-// Quiz routes (authenticated)
-router.use('/api/v1/quizzes', authenticate,createProxyMiddleware({
-  target: 'http://localhost:4002',
-  changeOrigin: true
-}));
+// Notification Service
+router.use(
+  "/api/v1/notify",
+  createProxyMiddleware({
+    target: process.env.NOTIFY_SERVICE_URL,
+    changeOrigin: true,
+    pathRewrite: { "^/api/v1/notify": "" },
+  })
+);
 
-// Submission routes (authenticated)
-router.use('/api/v1/submissions', authenticate, createProxyMiddleware({
-  target: 'http://localhost:4003',
-  changeOrigin: true
-}));
+// Quiz Service
+router.use(
+  "/api/v1/quiz",
+  createProxyMiddleware({
+    target: process.env.QUIZ_SERVICE_URL,
+    changeOrigin: true,
+    pathRewrite: { "^/api/v1/quiz": "" },
+  })
+);
 
 export default router;
