@@ -1,7 +1,7 @@
 import ky from "ky";
 
 // You can optionally load your API base URL from env like this:
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1/";
 
 const api = ky.create({
   prefixUrl: `${API_BASE_URL}`,

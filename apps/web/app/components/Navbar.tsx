@@ -5,9 +5,9 @@ import { useUserStore } from "@/lib/store/user-store";
 import { useAuthSync } from "@/lib/hooks/useAuthSync";
 
 const Navbar = () => {
-  const { user } = useUserStore();
+  const { user, isLoading } = useUserStore();
 
-  useAuthSync(); // ✅ sync on every load
+  useAuthSync();
 
   const navLinkStyles =
     "text-secondary-foreground text-sm hover:outline p-7 py-2 rounded transition-colors";
@@ -25,23 +25,29 @@ const Navbar = () => {
         </h1>
 
         <ul className="hidden md:flex gap-2 md:gap-5 items-center">
-          {user ? (
+          {isLoading ? (
+            <>
+            {/* TODO Show skeleton */}
+            </>
+          ) : user ? (
             <>
               <li>
-                <p>XP: 120</p>
+                <p>XP: {user.xp}</p>
               </li>
               <li>
-                <p>Level 0</p>
+                <p>Level {user.level}</p>
               </li>
               <li className="text-sm font-bold">Hi, {user.name}</li>
               <li>
+                <Link href="/profile">
                 <img
                   src={user.avatarUrl || "/default-avatar.png"}
                   alt="avatar"
                   width={42}
                   height={42}
-                  className="rounded-full object-cover"
+                  className="rounded-full object-cover hover:opacity-80 transition-opacity"
                 />
+                </Link>
               </li>
             </>
           ) : (

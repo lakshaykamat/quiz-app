@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
 import ky from "ky";
+import { useRouter } from "next/navigation";
 
 
 export default function RegisterPage() {
@@ -15,24 +16,34 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-
+  const router = useRouter();
   const handleRegister = async () => {
     try {
-        if (password !== passwordConfirm) {
-            console.error("Passwords do not match.");
-            toast.error("Passwords do not match.");
-            return;
-        }
-      const res = await ky.post("http://127.0.0.1:4001/api/v1/auth/signup", {
+      if (password !== passwordConfirm) {
+        toast.error("Passwords do not match.");
+        return;
+      }
+  
+      const res = await ky.post(process.env.NEXT_PUBLIC_AUTH_API_URL + "/signup", {
         json: { name, email, password },
-      }).json();
+        throwHttpErrors: false, // 🔍 prevent automatic throw on non-2xx
+      });
+  
+      const data :any = await res.json();
+  
+      if (!res.ok) {
+        toast.error(data.message || "Registration failed.");
+        return;
+      }
   
       toast.success("Registration successful!");
+      router.push("/login");
     } catch (error: any) {
-      console.log(error)
-      toast.error(error.message || "Registration failed.");
+      console.error(error);
+      toast.error("Something went wrong.");
     }
   };
+  
 
   return (
     <motion.div
@@ -79,12 +90,13 @@ export default function RegisterPage() {
           <div className="relative">
             <Lock className="absolute left-3 top-4 h-5 w-5 text-gray-400"/>
             <Input
-              type="passwordConfirm"
-              placeholder="Re Enter Password"
-              className="pl-10 py-6"
-              value={passwordConfirm}
-              onChange={(e) => setPasswordConfirm(e.target.value)}
-            />
+  type="password"
+  placeholder="Re Enter Password"
+  className="pl-10 py-6"
+  value={passwordConfirm}
+  onChange={(e) => setPasswordConfirm(e.target.value)}
+/>
+
           </div>
 
           <Button size={"lg"} className="w-full" onClick={handleRegister}>

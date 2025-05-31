@@ -15,6 +15,7 @@ import { useUserStore } from "@/lib/store/user-store";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message,setMessage]=useState("")
 
   interface LoginResponse {
     [x: string]: any;
@@ -26,9 +27,12 @@ export default function LoginPage() {
 
   const handleLogin = async (email: string, password: string) => {
     try {
-      const res = await ky.post("http://localhost:4001/api/v1/auth/login", {
+      const res = await ky.post(process.env.NEXT_PUBLIC_AUTH_API_URL + "/login", {
         json: { email, password },
       }).json<LoginResponse>();
+      console.log(res)
+      setMessage("Redirecting to dashboard...")
+      
   
       toast.success("Logged in successfully!");
   
@@ -37,6 +41,7 @@ export default function LoginPage() {
       setUser(res.user)
       router.push("/dashboard");
     } catch (error: any) {
+      console.log(error)
       toast.error(error.message || "Login failed.");
     }
   };
@@ -83,6 +88,7 @@ export default function LoginPage() {
             Register
           </Link>
         </p>
+        {message && <p className="mt-3 text-center text-sm">{message}</p>}
       </div>
     </motion.div>
   );
