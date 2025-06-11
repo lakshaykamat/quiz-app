@@ -2,7 +2,7 @@ import * as quizRepo from "../repositories/quiz.repository";
 import { decrypt } from "../utils/cyrpto";
 import shuffleArray from "../utils/suffleQuestions";
 import { Quiz } from "../models/Quiz";
-import { getImageURL, modifyImagePathInQuizes } from "../utils/image.util";
+import { getImageURL, modifyImagePathInQuizzes } from "../utils/image.util";
 
 
 export const createNewQuiz = (data: any) => {
@@ -11,7 +11,7 @@ export const createNewQuiz = (data: any) => {
 
 export const getAllQuizzes = async() => {
   const quizes = await quizRepo.findAllQuizzes();
-  return modifyImagePathInQuizes(quizes);
+  return modifyImagePathInQuizzes(quizes);
 };
 
 export const getQuizById = async (

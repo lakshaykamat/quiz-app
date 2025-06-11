@@ -7,8 +7,17 @@ import path from 'path'
 dotenv.config({ path: path.resolve(__dirname, '../../../../.env') });
 
 const router = Router();
-console.log(process.env.GATEWAY_AUTH_SERVICE_URL)
-// Auth Service
+// Debug: Log all environment variables
+console.log('=== Gateway Environment Variables ===');
+console.log('AUTH_SERVICE_URL:', process.env.GATEWAY_AUTH_SERVICE_URL);
+console.log('SUBMISSION_SERVICE_URL:', process.env.GATEWAY_SUBMISSION_SERVICE_URL);
+console.log('NOTIFY_SERVICE_URL:', process.env.GATEWAY_NOTIFY_SERVICE_URL);
+console.log('QUIZ_SERVICE_URL:', process.env.GATEWAY_QUIZ_SERVICE_URL);
+console.log('=====================================');
+
+
+
+
 router.use(
   "/api/v1/auth",
   createProxyMiddleware({
