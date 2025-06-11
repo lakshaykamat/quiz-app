@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useUserStore } from "@/lib/store/user-store";
 import { useAuthSync } from "@/lib/hooks/useAuthSync";
+import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   const { user, isLoading } = useUserStore();
@@ -13,12 +14,12 @@ const Navbar = () => {
     "text-secondary-foreground text-sm hover:outline p-7 py-2 rounded transition-colors";
 
   return (
-    <header className="w-full bg-secondary text-secondary-foreground shadow-xs py-5 px-10">
+    <header className="w-full bg-secondary text-secondary-foreground shadow-xs py-3 px-2 md:py-5 md:px-10">
       <nav className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">
           <Link
             href="/"
-            className="text-secondary-foreground hover:text-secondary-foreground/80 transition-colors"
+            className="text-secondary-foreground hover:text-secondary-foreground/80 text-lg md:text-xl transition-colors"
           >
             Quiz Master
           </Link>
@@ -26,9 +27,7 @@ const Navbar = () => {
 
         <ul className="hidden md:flex gap-2 md:gap-5 items-center">
           {isLoading ? (
-            <>
-            {/* TODO Show skeleton */}
-            </>
+            <>{/* TODO Show skeleton */}</>
           ) : user ? (
             <>
               <li>
@@ -40,13 +39,13 @@ const Navbar = () => {
               <li className="text-sm font-bold">Hi, {user.name}</li>
               <li>
                 <Link href="/profile">
-                <img
-                  src={user.avatarUrl || "/default-avatar.png"}
-                  alt="avatar"
-                  width={42}
-                  height={42}
-                  className="rounded-full object-cover hover:opacity-80 transition-opacity"
-                />
+                  <img
+                    src={user.avatarUrl || "/default-avatar.png"}
+                    alt="avatar"
+                    width={42}
+                    height={42}
+                    className="rounded-full object-cover hover:opacity-80 transition-opacity"
+                  />
                 </Link>
               </li>
             </>
@@ -77,6 +76,18 @@ const Navbar = () => {
               </li>
             </>
           )}
+        </ul>
+        <ul className="flex md:hidden gap-2 items-center">
+          <li>
+            <Button>
+              <Link href={"/login"}>Login</Link>
+            </Button>
+          </li>
+          <li>
+            <Button variant={"link"}>
+              <Link href={"/signup"}>Signup</Link>
+            </Button>
+          </li>
         </ul>
       </nav>
     </header>

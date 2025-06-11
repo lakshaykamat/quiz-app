@@ -10,7 +10,6 @@ import { useState } from "react";
 import ky from "ky";
 import { useRouter } from "next/navigation";
 
-
 export default function RegisterPage() {
   const [name, setname] = useState("");
   const [email, setEmail] = useState("");
@@ -23,19 +22,22 @@ export default function RegisterPage() {
         toast.error("Passwords do not match.");
         return;
       }
-  
-      const res = await ky.post(process.env.NEXT_PUBLIC_AUTH_API_URL + "/signup", {
-        json: { name, email, password },
-        throwHttpErrors: false, // 🔍 prevent automatic throw on non-2xx
-      });
-  
-      const data :any = await res.json();
-  
+
+      const res = await ky.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
+        {
+          json: { name, email, password },
+          throwHttpErrors: false, // 🔍 prevent automatic throw on non-2xx
+        }
+      );
+
+      const data: any = await res.json();
+
       if (!res.ok) {
         toast.error(data.message || "Registration failed.");
         return;
       }
-  
+
       toast.success("Registration successful!");
       router.push("/login");
     } catch (error: any) {
@@ -43,7 +45,6 @@ export default function RegisterPage() {
       toast.error("Something went wrong.");
     }
   };
-  
 
   return (
     <motion.div
@@ -52,7 +53,9 @@ export default function RegisterPage() {
       animate={{ opacity: 1 }}
     >
       <div className="w-full max-w-md bg-card text-card-foreground p-8 rounded border border-gray-200 shadow-md">
-        <h2 className="text-3xl font-bold mb-6 text-center">Create Your Account</h2>
+        <h2 className="text-3xl font-bold mb-6 text-center">
+          Create Your Account
+        </h2>
 
         <div className="space-y-4 mb-6">
           <div className="relative">
@@ -67,7 +70,7 @@ export default function RegisterPage() {
           </div>
 
           <div className="relative">
-            <Mail className="absolute left-3 top-4 h-5 w-5 text-gray-400"/>
+            <Mail className="absolute left-3 top-4 h-5 w-5 text-gray-400" />
             <Input
               type="email"
               placeholder="Email"
@@ -78,7 +81,7 @@ export default function RegisterPage() {
           </div>
 
           <div className="relative">
-            <Lock className="absolute left-3 top-4 h-5 w-5 text-gray-400"/>
+            <Lock className="absolute left-3 top-4 h-5 w-5 text-gray-400" />
             <Input
               type="password"
               placeholder="Password"
@@ -88,18 +91,17 @@ export default function RegisterPage() {
             />
           </div>
           <div className="relative">
-            <Lock className="absolute left-3 top-4 h-5 w-5 text-gray-400"/>
+            <Lock className="absolute left-3 top-4 h-5 w-5 text-gray-400" />
             <Input
-  type="password"
-  placeholder="Re Enter Password"
-  className="pl-10 py-6"
-  value={passwordConfirm}
-  onChange={(e) => setPasswordConfirm(e.target.value)}
-/>
-
+              type="password"
+              placeholder="Re Enter Password"
+              className="pl-10 py-6"
+              value={passwordConfirm}
+              onChange={(e) => setPasswordConfirm(e.target.value)}
+            />
           </div>
 
-          <Button size={"lg"} className="w-full" onClick={handleRegister}>
+          <Button size={"lg"} className="w-full hover:cursor-pointer" onClick={handleRegister}>
             Register
           </Button>
         </div>

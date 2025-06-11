@@ -53,7 +53,7 @@ export const useUserStore = create<UserState>((set) => ({
       if (!token) {
         throw new Error("Token not found in cookies");
       }
-      const userData = await ky.get(process.env.NEXT_PUBLIC_AUTH_API_URL + '/me', {
+      const userData = await ky.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       }).json<User>();  // assuming your backend has a /me route
       userData.xp = Math.round(userData.xp)

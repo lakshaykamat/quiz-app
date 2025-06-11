@@ -12,7 +12,7 @@ export const submitQuiz = async ({
   answers: any[];
 }) => {
   try {
-    const res = await ky.post(process.env.NEXT_PUBLIC_SUBMISSION_API_URL!, {
+    const res = await ky.post(`${process.env.NEXT_PUBLIC_API_URL}/submission`, {
       json: {
         userId,
         quizId,
