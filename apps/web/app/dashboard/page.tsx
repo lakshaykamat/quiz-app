@@ -22,7 +22,7 @@ export default function DashboardPage() {
       try {
         const res:any = await ky.get(process.env.NEXT_PUBLIC_API_URL + "/quiz").json()
         console.log(res);
-        setQuizzes(res); // assuming your API response is { data: { data: [...] } }
+        setQuizzes(res);
       } catch (err) {
         console.error("Failed to fetch quizzes:", err);
       }
@@ -35,6 +35,25 @@ export default function DashboardPage() {
     quiz.title.toLowerCase().includes(search.toLowerCase())
   );
 
+const greetingUser = () => {
+  const now = new Date();
+  const currentHour = now.getHours();
+
+  let greeting = "";
+  if (currentHour < 12) {
+    greeting = "Good morning";
+  } else if (currentHour < 18) {
+    greeting = "Good afternoon";
+  } else {
+    greeting = "Good evening";
+  }
+
+  const day = now.getDate();
+  const month = now.toLocaleString('default', { month: 'long' });
+
+  return `${greeting}! Today is ${day} ${month}.`;
+}
+
   return (
     <motion.div
       className="px-6 py-10 space-y-10"
@@ -43,7 +62,7 @@ export default function DashboardPage() {
     >
       <div className="max-w-5xl mx-auto space-y-6 px-4">
         <h1 className="text-3xl font-bold">Welcome, {user?.name}!</h1>
-        <p className="text-muted-foreground">Here are your available quizzes:</p>
+        <p className="text-muted-foreground">{greetingUser()}</p>
 
         {/* User Summary */}
         <ProfileCard />
@@ -69,7 +88,7 @@ export default function DashboardPage() {
               key={quiz._id}
               title={quiz.title}
               difficulty={quiz.difficulty}
-              languageIcon={quiz.imageUrl} // assuming you store icon name in your quiz doc
+              languageIcon={quiz.imageUrl}
               onStart={() => router.push(`/playground/${quiz._id}`)}
               description={quiz.description}
               tags={quiz.tags}

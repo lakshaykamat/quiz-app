@@ -14,15 +14,16 @@ export default function RegisterPage() {
   const [name, setname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const router = useRouter();
   const handleRegister = async () => {
     try {
+      setIsLoading(true);
       if (password !== passwordConfirm) {
         toast.error("Passwords do not match.");
         return;
       }
-
       const res = await ky.post(
         `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
         {
@@ -41,6 +42,7 @@ export default function RegisterPage() {
       toast.success("Registration successful!");
       router.push("/login");
     } catch (error: any) {
+      setIsLoading(false);
       console.error(error);
       toast.error("Something went wrong.");
     }
@@ -101,8 +103,13 @@ export default function RegisterPage() {
             />
           </div>
 
-          <Button size={"lg"} className="w-full hover:cursor-pointer" onClick={handleRegister}>
-            Register
+          <Button
+            disabled={isLoading}
+            size={"lg"}
+            className="w-full hover:cursor-pointer"
+            onClick={handleRegister}
+          >
+            {isLoading ? "Registering..." : "Register"}
           </Button>
         </div>
 
