@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 
 type QuizCardProps = {
@@ -24,19 +23,16 @@ export default function QuizCard({
   languageIcon,
   onStart,
 }: QuizCardProps) {
-  const getDifficultyLabel = (difficulty:number)=> {
-    return difficulty === 0
-    ? "Easy" : difficulty === 1 ? "Medium" : "Hard"
-  }
+  const getDifficultyLabel = (difficulty: number) => {
+    return difficulty === 0 ? "Easy" : difficulty === 1 ? "Medium" : "Hard";
+  };
   return (
-    <motion.div
-      whileHover={{ scale: 1.03 }}
-      className="transition"
-    >
+    <motion.div whileHover={{ scale: 1.03 }} className="transition">
       <Card className="flex flex-col justify-between h-full">
         <CardHeader className="flex items-center gap-3">
           {languageIcon && (
-            <Image
+            <img
+              crossOrigin="anonymous"
               src={languageIcon}
               alt="icon"
               width={32}
@@ -52,8 +48,8 @@ export default function QuizCard({
                 difficulty === 0
                   ? "border-green-500 text-green-600"
                   : difficulty === 1
-                  ? "border-yellow-500 text-yellow-600"
-                  : "border-red-500 text-red-600"
+                    ? "border-yellow-500 text-yellow-600"
+                    : "border-red-500 text-red-600"
               }`}
             >
               {getDifficultyLabel(difficulty)}
