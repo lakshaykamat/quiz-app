@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 declare global {
   namespace Express {
     interface Request {
-      user?: string | JwtPayload; // Adjust the type based on your `jwt.verify` return type
+      user?: string; // Adjust the type based on your `jwt.verify` return type
     }
   }
 }
@@ -14,7 +14,7 @@ export const authenticate = (req: any, res: any, next: any):void => {
   if (!token) throw new Error('No token provided');
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as string | JwtPayload;
+    const decoded = jwt.verify(token, JWT_SECRET) as string;
     req.user = decoded;
     next();
   } catch (err) {

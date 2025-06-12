@@ -1,8 +1,11 @@
+// @ts-nocheck
+
 import request from 'supertest';
 import app from '../src/app';
 import Quiz from '../src/models/Quiz';
 import Question from '../src/models/Question';
 import mongoose from 'mongoose';
+import { describe, it } from 'node:test';
 
 describe('Get quiz by ID', () => {
   let quizId= "6804f8fb6ca637d884a5f348";

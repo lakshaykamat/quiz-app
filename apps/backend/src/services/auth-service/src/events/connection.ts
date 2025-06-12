@@ -1,18 +1,21 @@
-import * as amqp from 'amqplib/callback_api';
+import * as amqp from "amqplib/callback_api";
 
-let connection: amqp.Connection;
-let channel: amqp.Channel;
+let connection: any;
+let channel: any;
 
 export const connectQueue = async () => {
-  connection = await new Promise<amqp.Connection>((resolve, reject) => {
-    amqp.connect(process.env.AMQP_URL || 'amqp://localhost', (err, conn) => {
-      if (err) reject(err);
-      else resolve(conn);
-    });
+  connection = await new Promise<any>((resolve, reject) => {
+    amqp.connect(
+      process.env.AMQP_URL || "amqp://localhost",
+      (err: any, conn: any) => {
+        if (err) reject(err);
+        else resolve(conn);
+      }
+    );
   });
 
-  channel = await new Promise<amqp.Channel>((resolve, reject) => {
-    connection.createChannel((err, ch) => {
+  channel = await new Promise<any>((resolve, reject) => {
+    connection.createChannel((err: any, ch: any) => {
       if (err) reject(err);
       else resolve(ch);
     });

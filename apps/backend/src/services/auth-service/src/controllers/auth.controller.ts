@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import * as authService from "../services/auth.service";
-import { JwtPayload } from "jsonwebtoken";
 
 export const signup = async (req: any, res: any) => {
   try {
@@ -50,7 +49,7 @@ export const getProfile = async (req: any, res: any): Promise<void> => {
     if (!req.user || !req.user.id) {
       res.status(401).json({ message: "Unauthorized" });
     }
-    const user = await authService.getUserProfile((req.user as JwtPayload).id);
+    const user = await authService.getUserProfile((req.user).id);
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });

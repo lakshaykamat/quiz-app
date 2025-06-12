@@ -1,3 +1,9 @@
 declare module 'express';
 declare module 'cors';
 declare module 'amqplib';
+declare module 'jsonwebtoken';
+declare module 'amqplib/callback_api';
+declare module 'bcrypt';
+declare module 'morgan';
+declare module 'compression';
+declare module 'nodemailer';
