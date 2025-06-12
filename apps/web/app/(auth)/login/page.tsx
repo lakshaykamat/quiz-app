@@ -34,9 +34,9 @@ export default function LoginPage() {
         toast.error("Email and password are required.");
         return;
       }
-
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/auth/login`
       const res = await ky
-        .post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+        .post(url, {
           json: { email, password },
         })
         .json<LoginResponse>();

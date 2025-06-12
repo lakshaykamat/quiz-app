@@ -25,6 +25,9 @@ export const getQuizById = async (
   }
   quiz.imageUrl = getImageURL(quiz.imageUrl)
   
+  if(questionLimit == -1){
+    questionLimit = quiz.questionIds.length;
+  }
   // Shuffle and limit the questions
   let limitedQuestionIds = shuffleArray(quiz.questionIds).slice(
     0,

@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import api from "@/lib/api";
-import { decrypt } from "@/lib/cryptoUtils";
 import QuizHeader from "./components/QuizHeader";
 import QuestionCard from "./components/QuestionCard";
 import ResultToast from "./components/ResultToast";
@@ -117,7 +116,7 @@ export default function QuizPlayground() {
     return <div className="text-center py-20 text-lg">Loading quiz...</div>;
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-8">
+    <div className="px-3 py-6 max-w-4xl mx-auto space-y-8">
       <Progress value={(currentQuestionIndex / questions.length) * 100} />
       <QuizHeader
         imageUrl={quiz.imageUrl}
