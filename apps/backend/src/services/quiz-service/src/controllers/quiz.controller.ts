@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 import * as quizService from '../services/quiz.service';
 
-export const createQuiz = async (req: Request, res: Response) => {
+export const createQuiz = async (req: any, res: any) => {
   const quiz = await quizService.createNewQuiz(req.body);
   res.status(201).json(quiz);
 };
 
-export const getQuiz = async (req: Request, res: Response) => {
+export const getQuiz = async (req: any, res: any) => {
   try {
     const questionLimit = parseInt(req.query.questionLimit as string);
     
@@ -29,7 +29,7 @@ export const getQuiz = async (req: Request, res: Response) => {
 };
 
 
-export const getQuizzes = async (_req: Request, res: Response) => {
+export const getQuizzes = async (_req: any, res: any) => {
   const quizzes = await quizService.getAllQuizzes();
   res.status(200).json(quizzes);
 };

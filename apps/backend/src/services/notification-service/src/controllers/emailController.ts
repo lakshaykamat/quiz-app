@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { sendMail } from '../services/mailService';
 import { EmailPayload } from '../types/email';
 
-export const sendWelcomeEmail = async (req: Request, res: Response) => {
+export const sendWelcomeEmail = async (req: any, res: any) => {
   const { email, name } = req.body as EmailPayload;
 
   // Use the designed HTML template
@@ -83,7 +83,7 @@ export const sendWelcomeEmail = async (req: Request, res: Response) => {
   res.status(200).json({ message: `Welcome email sent to ${email}` });
 };
 
-export const sendVerificationEmail = async (req: Request, res: Response) => {
+export const sendVerificationEmail = async (req: any, res: any) => {
   const { email, name, verificationLink } = req.body as EmailPayload;
 
   const html = `

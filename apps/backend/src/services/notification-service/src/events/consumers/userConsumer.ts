@@ -7,7 +7,7 @@ export const startUserRegisteredConsumer = async () => {
 
   await channel.assertQueue(queue, { durable: true });
 
-  channel.consume(queue, async (msg) => {
+  channel.consume(queue, async (msg:any) => {
     if (msg !== null) {
       const userData = JSON.parse(msg.content.toString());
       console.log('Received user registered event:', userData);

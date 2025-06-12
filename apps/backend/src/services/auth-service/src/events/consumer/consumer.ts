@@ -6,7 +6,7 @@ const consumeQuizSubmissions = async () => {
   const channel = await connection.createChannel();
   await channel.assertQueue("quiz.submitted", { durable: true });
 
-  channel.consume("quiz.submitted", async (msg) => {
+  channel.consume("quiz.submitted", async (msg:any) => {
     if (msg !== null) {
       const event = JSON.parse(msg.content.toString());
 

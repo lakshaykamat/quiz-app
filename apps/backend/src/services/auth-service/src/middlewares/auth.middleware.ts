@@ -8,7 +8,7 @@ declare global {
   }
 }
 
-export const authenticate = (req: Request, res: Response, next: NextFunction):void => {
+export const authenticate = (req: any, res: any, next: any):void => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) throw new Error('No token provided');
   try {

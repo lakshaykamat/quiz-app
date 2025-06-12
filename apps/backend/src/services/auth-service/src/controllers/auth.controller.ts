@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import * as authService from "../services/auth.service";
 import { JwtPayload } from "jsonwebtoken";
 
-export const signup = async (req: Request, res: Response) => {
+export const signup = async (req: any, res: any) => {
   try {
     const user = await authService.signup(req.body);
     res.status(201).json(user);
@@ -15,14 +15,12 @@ export const signup = async (req: Request, res: Response) => {
   }
 };
 
-export const getProgressData = async (req: Request, res: Response):Promise<void> => {
+export const getProgressData = async (req: any, res: any):Promise<void> => {
   try {
-    //@ts-ignore
     if (!req.user|| !req.user.id) {
       res.status(401).json({ message: "Unauthorized" });
     }
 
-    //@ts-ignore
     const progressData = await authService.getUserProgressData(req.user.id);
     res.status(200).json(progressData);
   } catch (error) {
@@ -31,7 +29,7 @@ export const getProgressData = async (req: Request, res: Response):Promise<void>
   }
 };
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (req: any, res: any) => {
   try {
     const { token, user } = await authService.login(
       req.body.email,
@@ -47,7 +45,7 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-export const getProfile = async (req: any, res: Response): Promise<void> => {
+export const getProfile = async (req: any, res: any): Promise<void> => {
   try {
     if (!req.user || !req.user.id) {
       res.status(401).json({ message: "Unauthorized" });

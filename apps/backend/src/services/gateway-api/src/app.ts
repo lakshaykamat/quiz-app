@@ -23,7 +23,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // Health check
-app.get("/", (req, res) => {
+app.get("/", (req:any, res:any) => {
   res.status(200).json({ status: "UP", timestamp: new Date().toISOString() });
 });
 

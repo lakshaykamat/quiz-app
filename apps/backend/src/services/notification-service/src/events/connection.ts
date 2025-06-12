@@ -1,7 +1,7 @@
 import amqp from 'amqplib';
 
-let connection: amqp.Connection;
-let channel: amqp.Channel;
+let connection: any
+let channel: any
 
 export const connectQueue = async () => {
     //@ts-ignore
