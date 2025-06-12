@@ -21,7 +21,7 @@ export const useAuthSync = () => {
       setLoading(true);
       try {
         const userData = await ky
-          .get("http://127.0.0.1:4001/me", {
+          .get(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
             headers: { Authorization: `Bearer ${token}` },
           })
           .json<User>();

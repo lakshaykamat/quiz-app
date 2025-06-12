@@ -20,7 +20,7 @@ app.use('/', Gateway);
 //@ts-ignore
 app.get('/', (_req, res) => res.send("Welcome"))
 
-
+app.use("/static", express.static(path.join(__dirname, "public")));
 app.listen(process.env.PORT || 3000, () => {
   mongoose.connect(process.env.MONGO_URI!).then(() => {
     console.log("MONGO_URI connected - Backend");
