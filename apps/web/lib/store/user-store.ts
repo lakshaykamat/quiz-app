@@ -55,7 +55,7 @@ export const useUserStore = create<UserState>((set) => ({
       }
       const userData = await ky.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
-      }).json<User>();  // assuming your backend has a /me route
+      }).json<User>();
       userData.xp = Math.round(userData.xp)
       set({ user: userData });
     } catch (e) {

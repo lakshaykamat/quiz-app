@@ -121,7 +121,7 @@ export default function DashboardPage() {
                   title={quiz.title}
                   difficulty={quiz.difficulty}
                   languageIcon={quiz.imageUrl}
-                  onStart={() => router.push(`/quiz/${generateQuizSlug(quiz.title, quiz._id)}`)}
+                  slug={generateQuizSlug(quiz.title, quiz._id)}
                   description={quiz.description}
                   tags={quiz.tags}
                 />

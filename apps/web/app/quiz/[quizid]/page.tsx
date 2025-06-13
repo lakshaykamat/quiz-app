@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import ky from "ky";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +19,7 @@ import {
 import Image from "next/image";
 import { getDifficulty } from "@/lib/utils";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 // Simulate faker.js style data generation
 const generateMockStats = () => ({
@@ -58,7 +59,6 @@ interface Quiz {
 }
 
 export default function QuizDetailsPage() {
-  const router = useRouter();
   const params = useParams();
   const slug = params.quizid as string;
 
@@ -119,7 +119,7 @@ export default function QuizDetailsPage() {
       default:
         return "bg-gray-200";
     }
-  }
+  };
   if (!quiz) {
     return (
       <div className="max-w-5xl mx-auto py-10 px-4">
@@ -189,20 +189,20 @@ export default function QuizDetailsPage() {
           </Card>
 
           <div className="flex gap-4">
-            <Button
-              size="lg"
-              className="cursor-pointer"
-              onClick={() => router.push(`/playground/${quiz._id}`)}
-            >
-              Start Solo
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={() => router.push(`/lobby/create?quiz=${quiz._id}`)}
-            >
-              Play with Friend
-            </Button>
+            <Link href={`/playground/${quiz._id}`}>
+              <Button size="lg" className="cursor-pointer">
+                Start Solo
+              </Button>
+            </Link>
+            <Link href={`/playground/friends/?quiz=${quiz._id}`}>
+              <Button
+                size="lg"
+                variant="outline"
+                className="hover:cursor-pointer"
+              >
+                Play with Friend
+              </Button>
+            </Link>
           </div>
         </div>
 
@@ -279,10 +279,11 @@ export default function QuizDetailsPage() {
       >
         <h2 className="text-3xl font-semibold text-center">About This Quiz</h2>
         <p className="text-muted-foreground leading-relaxed text-lg text-center max-w-3xl mx-auto">
-          Dive deep into this {String(quiz.difficulty).toLowerCase()} quiz to challenge
-          your knowledge on {quiz.tags.join(", ")}. Whether you're playing solo
-          or competing with friends, this quiz is designed to test your skills,
-          improve your learning curve, and deliver fun with every attempt!
+          Dive deep into this {String(quiz.difficulty).toLowerCase()} quiz to
+          challenge your knowledge on {quiz.tags.join(", ")}. Whether you're
+          playing solo or competing with friends, this quiz is designed to test
+          your skills, improve your learning curve, and deliver fun with every
+          attempt!
         </p>
       </motion.div>
     </div>

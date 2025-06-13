@@ -5,14 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 type QuizCardProps = {
   title: string;
   description: string;
   difficulty: number; // 0: Easy, 1: Medium, 2:Hard
   tags: string[];
+  slug: string;
   languageIcon?: string;
-  onStart?: () => void;
 };
 
 export default function QuizCard({
@@ -20,12 +21,20 @@ export default function QuizCard({
   description,
   difficulty,
   tags,
+  slug,
   languageIcon,
-  onStart,
 }: QuizCardProps) {
   const getDifficultyLabel = (difficulty: number) => {
     return difficulty === 0 ? "Easy" : difficulty === 1 ? "Medium" : "Hard";
   };
+
+  function truncateSentence(sentence: string, maxLength = 100) {
+    if (sentence.length <= maxLength) {
+      return sentence;
+    } else {
+      return sentence.slice(0, maxLength) + "...";
+    }
+  }
   return (
     <motion.div whileHover={{ scale: 1.03 }} className="transition">
       <Card className="flex flex-col justify-between h-full">
@@ -58,7 +67,9 @@ export default function QuizCard({
         </CardHeader>
 
         <CardContent className="space-y-3 flex flex-col flex-1 justify-between">
-          <p className="text-sm text-muted-foreground">{description}</p>
+          <p className="text-sm text-muted-foreground">
+            {truncateSentence(description)}
+          </p>
 
           <div className="flex flex-wrap gap-2 mt-2">
             {tags.slice(0, 3).map((tag, idx) => (
@@ -72,14 +83,15 @@ export default function QuizCard({
             ))}
           </div>
 
-          <Button
-            onClick={onStart}
-            className="w-full mt-4 hover:cursor-pointer"
-            variant="default"
-            size="sm"
-          >
-            Start Quiz <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+          <Link href={`/quiz/${slug}`}>
+            <Button
+              className="w-full mt-4 hover:cursor-pointer"
+              variant="default"
+              size="sm"
+            >
+              Start The Quiz <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
         </CardContent>
       </Card>
     </motion.div>

@@ -122,7 +122,10 @@ export default function QuizPlayground() {
         imageUrl={quiz.imageUrl}
         title={quiz.title}
         endTime={quizEndTime!}
-        onTimeUp={() => toast.error("Time's up!")}
+        onTimeUp={() => {
+          toast.error("Time's up!");
+          router.push(`/dashboard`);
+        }}
       />
 
       {currentQuestion && (
