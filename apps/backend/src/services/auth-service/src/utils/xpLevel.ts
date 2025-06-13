@@ -6,7 +6,7 @@ import User from "../models/User.model";
  * @returns XP earned
  */
 const calculateXPFromScore = (score: number): number => {
-  return score * 5; // Adjust multiplier as needed for game balance
+  return score * 0.2; // Adjust multiplier as needed for game balance
 };
 
 /**

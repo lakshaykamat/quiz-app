@@ -19,6 +19,7 @@ export const submitQuiz = async (submissionData: Submission) => {
     userId,
     quizId,
     score,
+    submissionId: data._id,
     timestamp: new Date().toISOString(),
   });
   return data;

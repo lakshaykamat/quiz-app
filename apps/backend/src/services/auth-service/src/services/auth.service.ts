@@ -41,7 +41,7 @@ export const signup = async (userData: User) => {
     password: hashedPassword,
     createdAt: new Date(),
     updatedAt: new Date(),
-    avatarUrl: "https://avatar.iran.liara.run/public",
+    avatarUrl: `https://avatar.iran.liara.run/public/?username=${name}`,
     bio: "",
     role: "user",
     quizzesTaken: new mongoose.Types.DocumentArray([]),
