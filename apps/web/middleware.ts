@@ -5,8 +5,8 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
 
-  // If no token and trying to access a protected page
-  if (!token && request.nextUrl.pathname.startsWith("/dashboard")) {
+  // If no token and the request is to a protected route (covered by matcher config)
+  if (!token) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
@@ -20,5 +20,5 @@ export const config = {
     "/profile/:path*",
     "/playground/:path*",
     "/quiz/:path*",
-  ], // Protect these routes
+  ], // All these routes are protected
 };

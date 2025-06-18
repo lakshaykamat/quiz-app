@@ -15,7 +15,7 @@ interface RequestBody {
     const requestBody: RequestBody = { name, email };
   
     try {
-      const response = await fetch(`${process.env.QUIZ_SERVICE_IMAGE_DOMAIN_URL}/api/v1/notify/welcome`, {
+      const response = await fetch(`${process.env.GATEWAY_URL}/api/v1/notify/welcome`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

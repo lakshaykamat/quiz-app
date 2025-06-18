@@ -7,7 +7,7 @@
  * @throws Error if required environment variables are missing.
  */
 export function getImageURL(fileName: string): string {
-  const imageDomainUrl = process.env.QUIZ_SERVICE_IMAGE_DOMAIN_URL;
+  const imageDomainUrl = process.env.GATEWAY_URL;
   const nodeEnv = process.env.NODE_ENV ?? 'production';
 
   if (!imageDomainUrl) {
