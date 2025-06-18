@@ -8,6 +8,7 @@ import QuizService from './services/quiz-service/src/app';
 import SubmissionService from './services/submission-service/src/app';
 import NotificationService from './services/notification-service/src/app'
 import AuthService from './services/auth-service/src/app'
+import RealTimeService from './services/realtime-service/src/app';
 import Gateway from "./services/gateway-api/src/app"
 import mongoose from 'mongoose';
 
@@ -16,6 +17,7 @@ app.use('/quiz', QuizService);
 app.use('/submission', SubmissionService);
 app.use('/notification', NotificationService);
 app.use('/auth', AuthService);
+app.use('/realtime', RealTimeService);
 app.use('/', Gateway);
 //@ts-ignore
 app.get('/', (_req, res) => res.send("Welcome"))

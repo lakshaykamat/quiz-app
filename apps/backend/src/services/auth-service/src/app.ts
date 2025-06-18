@@ -13,7 +13,12 @@ import consumeQuizSubmissions from "./events/consumer/consumer";
 const app = express();
 
 // Middleware: Body Parsing
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL, // ✅ exact frontend origin
+    credentials: true, // ✅ allow cookies and Authorization headers
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(bodyParser.json());

@@ -7,3 +7,9 @@ export const findUserByEmail = async(email:string,shouldHavePassword=false)=>{
 
 }
 export const findUserById = (id: string) => User.findById(id);  
+
+export const findUserByName = (name: string) => {
+  return User.find({
+    name: { $regex: name, $options: 'i' } // 'i' for case-insensitive
+  });
+};

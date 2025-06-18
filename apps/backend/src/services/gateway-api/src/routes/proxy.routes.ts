@@ -55,5 +55,23 @@ router.use(
     pathRewrite: { "^/api/v1/quiz": "" },
   })
 );
+// 1️⃣ Proxy REST endpoints (optional if using HTTP APIs from realtime service)
+router.use(
+  "/api/v1/realtime",
+  createProxyMiddleware({
+    target: process.env.GATEWAY_REALTIME_SERVICE_URL,
+    changeOrigin: true,
+    pathRewrite: { "^/api/v1/realtime": "" },
+  })
+);
 
+// 2️⃣ Proxy WebSocket traffic (Socket.IO)
+router.use(
+  "/socket.io",
+  createProxyMiddleware({
+    target: process.env.GATEWAY_REALTIME_SERVICE_URL,
+    changeOrigin: true,
+    ws: true, // 🔥 Enables WebSocket proxying
+  })
+);
 export default router;

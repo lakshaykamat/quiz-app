@@ -1,140 +1,97 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useUserStore } from "@/lib/store/user-store";
-import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
 import { motion, animate } from "framer-motion";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export default function QuizEndPage() {
-  const { user, refreshUser } = useUserStore();
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [animatedScore, setAnimatedScore] = useState(0);
+  const meData = JSON.parse(decodeURIComponent(searchParams.get("me") || "{}"));
+  const opponentData = JSON.parse(decodeURIComponent(searchParams.get("opponent") || "{}"));
 
-  const score = Number(searchParams.get("score") || 0);
-  const title = searchParams.get("title") || "Python Basics Quiz";
-  const answersJson = searchParams.get("answers");
-  const answers = answersJson
-    ? JSON.parse(decodeURIComponent(answersJson))
-    : [];
+  const [animatedMyScore, setAnimatedMyScore] = useState(0);
+  const [animatedOpponentScore, setAnimatedOpponentScore] = useState(0);
 
-  const correctCount = answers.filter((a: any) => a.isCorrect).length;
-  const wrongCount = answers.length - correctCount;
+  const correctCount = meData.answers?.filter((a: any) => a.isCorrect).length || 0;
+  const opponentCorrectCount = opponentData.answers?.filter((a: any) => a.isCorrect).length || 0;
 
   useEffect(() => {
-    refreshUser();
-  }, []);
-
-  // Animate score count-up
-  useEffect(() => {
-    const controls = animate(0, score, {
+    animate(0, meData.score || 0, {
       duration: 1.2,
-      onUpdate(value) {
-        setAnimatedScore(Math.floor(value));
+      onUpdate(val) {
+        setAnimatedMyScore(Math.floor(val));
       },
     });
-    return () => controls.stop();
-  }, [score]);
+    animate(0, opponentData.score || 0, {
+      duration: 1.2,
+      onUpdate(val) {
+        setAnimatedOpponentScore(Math.floor(val));
+      },
+    });
+  }, [meData.score, opponentData.score]);
+
+  const totalQuestions = meData.answers?.length || 0;
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-8">
-      {/* Title & Score */}
-      <div className="text-center space-y-4">
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-3xl font-bold"
-        >
-          {title}
-        </motion.h1>
+    <div className="p-6 max-w-5xl mx-auto space-y-10">
+      {/* Header */}
+      <div className="text-center space-y-6">
+        <motion.h1 className="text-3xl font-bold">🏁 Quiz Battle Result</motion.h1>
 
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="text-6xl font-extrabold text-primary"
-        >
-          {animatedScore}
-        </motion.div>
+        <div className="grid grid-cols-2 gap-4 justify-center text-center">
+          <div>
+            <h2 className="text-xl font-semibold">{meData.username || "You"}</h2>
+            <p className="text-5xl font-bold text-primary">{animatedMyScore}</p>
+            <p className="text-muted-foreground">✅ {correctCount} / {totalQuestions}</p>
+          </div>
+          <div>
+            <h2 className="text-xl font-semibold">{opponentData.username || "Opponent"}</h2>
+            <p className="text-5xl font-bold text-secondary">{animatedOpponentScore}</p>
+            <p className="text-muted-foreground">✅ {opponentCorrectCount} / {totalQuestions}</p>
+          </div>
+        </div>
 
-        <p className="text-muted-foreground text-sm">
-          ✅{correctCount} | ❌{wrongCount}
-        </p>
-        {/* <p className="text-muted-foreground text-sm">
-
-          XP: <span className="font-semibold">{user?.xp}</span> | Level:{" "}
-          <span className="font-semibold">{user?.level}</span>
-        </p> */}
-
-        <div className="flex flex-wrap justify-center gap-4 mt-4">
-          <Button className="hover:cursor-pointer" onClick={() => router.push("/dashboard")}>
-            Back to Dashboard
-          </Button>
-          <Button className="hover:cursor-pointer" variant="secondary" onClick={() => router.back()}>
-            Replay Quiz
-          </Button>
+        <div className="flex justify-center gap-4 mt-6">
+          <Button onClick={() => router.push("/dashboard")}>Back to Dashboard</Button>
+          <Button variant="secondary" onClick={() => router.back()}>Replay Quiz</Button>
         </div>
       </div>
 
-      {/* Score Summary */}
-      {/* <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
-        className="text-center space-y-2 mt-4"
-      >
-        <p className="text-lg font-medium">Total Questions: {answers.length}</p>
-        <p className="text-green-600 font-semibold">✅ Correct: {correctCount}</p>
-        <p className="text-red-600 font-semibold">❌ Wrong: {wrongCount}</p>
-      </motion.div> */}
-
-      {/* Answers Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-        {answers.map((ans: any, idx: number) => (
-          <ExplanationCard key={idx} idx={idx} ans={ans} />
-        ))}
+      {/* Comparison Table */}
+      <div className="grid gap-4">
+        {meData.answers?.map((q: any, idx: number) => {
+          const opponentQ = opponentData.answers?.[idx];
+          return (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.05 }}
+              className="p-4 border rounded shadow-sm bg-background"
+            >
+              <p className="font-semibold mb-2">
+                #{idx + 1}: {q.questionText}
+              </p>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div className={q.isCorrect ? "text-green-600" : "text-red-600"}>
+                  <p><strong>You:</strong> {q.userAnswer} ({q.isCorrect ? "✅" : "❌"})</p>
+                </div>
+                <div className={opponentQ?.isCorrect ? "text-green-600" : "text-red-600"}>
+                  <p><strong>Opponent:</strong> {opponentQ?.userAnswer} ({opponentQ?.isCorrect ? "✅" : "❌"})</p>
+                </div>
+              </div>
+              {q.explanation && (
+                <p className="text-xs text-muted-foreground mt-2">
+                  💡 Explanation: {q.explanation}
+                </p>
+              )}
+            </motion.div>
+          );
+        })}
       </div>
     </div>
   );
 }
-const ExplanationCard = ({ ans, idx }: { ans: any; idx: number }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: idx * 0.05 }}
-      className={`border rounded p-4 space-y-2 shadow ${
-        ans.isCorrect
-          ? "border-green-500 bg-green-50"
-          : "border-red-500 bg-red-50"
-      }`}
-    >
-      <p className="text-base font-semibold">
-        #{idx + 1}: {ans.questionText}
-      </p>
-      {/* <p>
-        <span className="font-medium">Your Answer:</span>{" "}
-        <span className="font-semibold">{ans.userAnswer}</span>
-      </p> */}
-      <p>
-        <span className="font-medium">Answer:</span>{" "}
-        <span className="font-semibold">{ans.correctAnswer}</span>
-      </p>
-      {/* <p
-        className={`font-semibold ${
-          ans.isCorrect ? "text-green-600" : "text-red-600"
-        }`}
-      >
-        {ans.isCorrect ? "✅ Correct" : "❌ Wrong"}
-      </p> */}
-      {ans.explanation && (
-        <p className="text-muted-foreground text-sm">
-          <span>{ans.explanation}</span>
-        </p>
-      )}
-    </motion.div>
-  );
-};

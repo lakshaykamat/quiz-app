@@ -74,3 +74,7 @@ export const login = async (email: string, password: string) => {
 export const getUserProfile = async (userId: string) => {
   return await repo.findUserById(userId);
 };
+
+export const findUserByName = async (name: string)=>{
+  return await repo.findUserByName(name);
+}

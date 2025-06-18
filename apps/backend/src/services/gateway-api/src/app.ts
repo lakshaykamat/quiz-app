@@ -10,7 +10,11 @@ const app = express();
 
 // Middleware
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+  origin: process.env.CLIENT_URL, // or your frontend
+  credentials: true,              // ✅ allows cookies
+}));
+
 app.use(morgan("dev"));
 //app.use(express.json());
 app.use(compression());

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import api from "@/lib/api";
 import QuizHeader from "./components/QuizHeader";
@@ -11,11 +11,14 @@ import { Progress } from "@/components/ui/progress";
 import NextButtonWithTimer from "./components/NextButtonWithTimer";
 import { submitQuiz } from "./submitQuiz";
 import { useUserStore } from "@/lib/store/user-store";
+import socket from "@/lib/socket";
 
 export default function QuizPlayground() {
   const { quizid } = useParams();
   const { user } = useUserStore();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [quiz, setQuiz] = useState<any>(null);
   const [questions, setQuestions] = useState<any[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -27,8 +30,11 @@ export default function QuizPlayground() {
   );
   const [showExplanation, setShowExplanation] = useState(false);
   const [userAnswers, setUserAnswers] = useState<any[]>([]);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const currentQuestion = questions[currentQuestionIndex];
+  const roomId = searchParams.get("roomId") || (quizid as string);
+  const isBattleMode = roomId && roomId !== quizid;
 
   const handleAnswer = (userAnswer: any) => {
     if (!startTime || !currentQuestion) return;
@@ -43,8 +49,6 @@ export default function QuizPlayground() {
     let points = 0;
     if (isCorrect) {
       points = 10 + Math.max(0, 5 - timeTaken);
-    } else {
-      points = 0; // or points = -10 if you want a negative penalty
     }
 
     setScore((prev) => prev + points);
@@ -62,39 +66,77 @@ export default function QuizPlayground() {
   };
 
   const handleNext = async () => {
-    if (!user) return;
+    if (!user || isSubmitted) return;
+
     setShowResult(null);
     setShowExplanation(false);
 
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((prev) => prev + 1);
     } else {
-      try {
-        console.log(userAnswers);
-        await submitQuiz({
-          userId: user._id,
-          quizId: quizid as string,
-          score,
-          answers: userAnswers,
-        });
-        toast.success(`Quiz completed! Final Score: ${score}`);
-        // Prepare answers for result page
-        const resultAnswers = questions.map((q, i) => ({
-          questionText: q.questionText,
-          correctAnswer: q.correctAnswer,
-          userAnswer: userAnswers[i]?.userAnswer,
-          isCorrect: userAnswers[i]?.isCorrect,
-          explanation: q.explanation,
-        }));
+      setIsSubmitted(true);
 
-        router.push(
-          `/quiz/${quizid}/result?score=${score}&answers=${encodeURIComponent(JSON.stringify(resultAnswers))}`
-        );
+      const resultAnswers = questions.map((q, i) => ({
+        questionText: q.questionText,
+        correctAnswer: q.correctAnswer,
+        userAnswer: userAnswers[i]?.userAnswer,
+        isCorrect: userAnswers[i]?.isCorrect,
+        explanation: q.explanation,
+      }));
+
+      try {
+        if (isBattleMode) {
+          socket.emit("quiz:finished", {
+            roomId,
+            userId: user._id,
+            username: user.name,
+            score,
+            answers: resultAnswers,
+          });
+        } else {
+          await submitQuiz({
+            userId: user._id,
+            quizId: quizid as string,
+            score,
+            answers: userAnswers,
+          });
+
+          toast.success(`Quiz completed! Final Score: ${score}`);
+          router.push(
+            `/quiz/${quizid}/result?score=${score}&answers=${encodeURIComponent(
+              JSON.stringify(resultAnswers)
+            )}`
+          );
+        }
       } catch (e) {
         toast.error("Failed to submit quiz.");
       }
     }
   };
+
+  useEffect(() => {
+    const handleBothFinished = ({
+      myResult,
+      opponentResult,
+    }: {
+      myResult: any;
+      opponentResult: any;
+    }) => {
+      if (isSubmitted) return;
+
+      setIsSubmitted(true);
+      const url = `/quiz/${quizid}/result?me=${encodeURIComponent(
+        JSON.stringify(myResult)
+      )}&opponent=${encodeURIComponent(JSON.stringify(opponentResult))}`;
+      console.log("Redirecting to:", url);
+      router.replace(url);
+    };
+
+    socket.on("quiz:bothFinished", handleBothFinished);
+    return () => {
+      socket.off("quiz:bothFinished", handleBothFinished);
+    };
+  }, [user, quizid, router, isSubmitted]);
 
   useEffect(() => {
     const fetchQuiz = async () => {
@@ -117,6 +159,8 @@ export default function QuizPlayground() {
 
   return (
     <div className="px-3 py-6 max-w-4xl mx-auto space-y-8">
+      <a href={`/quiz/${quizid}/result?me=123&opponent=456`} target="_blank">Test Result Page</a>
+
       <Progress value={(currentQuestionIndex / questions.length) * 100} />
       <QuizHeader
         imageUrl={quiz.imageUrl}

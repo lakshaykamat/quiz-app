@@ -4,16 +4,53 @@ import Link from "next/link";
 import Image from "next/image";
 import { useUserStore } from "@/lib/store/user-store";
 import { useAuthSync } from "@/lib/hooks/useAuthSync";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import socket from "@/lib/socket";
+import { toast } from "sonner"; // or use `react-toastify`
+
+import { useRouter } from "next/navigation";
+import { useInviteStore } from "@/lib/store/invite-store";
 
 const Navbar = () => {
   const { user, isLoading } = useUserStore();
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const router = useRouter();
+  const { setInviteInfo } = useInviteStore();
 
   useAuthSync();
 
   const toggleMobileMenu = () => setMobileMenuOpen(!isMobileMenuOpen);
+
+  // 🔔 Listen for real-time invites
+
+  useEffect(() => {
+    if (!user) return;
+
+    socket.emit("register", { userId: user._id });
+
+    socket.on("invite-received", ({ quizId, roomId, from }) => {
+      setInviteInfo({ quizId, roomId, from }); // ✅ Save for later use
+      toast(`You got an invite from ${from.name}`, {
+        action: {
+          label: "Accept",
+          onClick: () => {
+            socket.emit("accept-invite", {
+              roomId,
+              name: user.name,
+              avatarUrl: user.avatarUrl,
+            });
+
+            router.push(`/playground/friends?quiz=${quizId}`);
+          },
+        },
+      });
+    });
+
+    return () => {
+      socket.off("invite-received");
+    };
+  }, [user]);
 
   const navLinkStyles =
     "text-secondary-foreground text-sm hover:outline p-2 px-4 rounded transition-colors";
@@ -51,11 +88,26 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <li><Link href="/" className={navLinkStyles}>Home</Link></li>
-              <li><Link href="/about" className={navLinkStyles}>About</Link></li>
-              <li><Link href="/login" className={navLinkStyles}>Login</Link></li>
               <li>
-                <Link href="/register" className={`${navLinkStyles} bg-primary text-white`}>
+                <Link href="/" className={navLinkStyles}>
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link href="/about" className={navLinkStyles}>
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link href="/login" className={navLinkStyles}>
+                  Login
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/register"
+                  className={`${navLinkStyles} bg-primary text-white`}
+                >
                   Register
                 </Link>
               </li>
@@ -95,14 +147,25 @@ const Navbar = () => {
                 <p>XP: {user.xp}</p>
                 <p>Level {user.level}</p>
               </div>
-              <Link href="/profile" className={navLinkStyles}>Profile</Link>
+              <Link href="/profile" className={navLinkStyles}>
+                Profile
+              </Link>
             </>
           ) : (
             <>
-              <Link href="/" className={navLinkStyles}>Home</Link>
-              <Link href="/about" className={navLinkStyles}>About</Link>
-              <Link href="/login" className={navLinkStyles}>Login</Link>
-              <Link href="/register" className={`${navLinkStyles} bg-primary text-white`}>
+              <Link href="/" className={navLinkStyles}>
+                Home
+              </Link>
+              <Link href="/about" className={navLinkStyles}>
+                About
+              </Link>
+              <Link href="/login" className={navLinkStyles}>
+                Login
+              </Link>
+              <Link
+                href="/register"
+                className={`${navLinkStyles} bg-primary text-white`}
+              >
                 Register
               </Link>
             </>

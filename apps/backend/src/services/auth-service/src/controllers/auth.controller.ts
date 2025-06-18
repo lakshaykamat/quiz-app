@@ -14,6 +14,18 @@ export const signup = async (req: any, res: any) => {
   }
 };
 
+export const getUserByName = async (req: any, res: any) => {
+  try {
+    const user = await authService.findUserByName(req.params.name);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error fetching user by name:", error);
+    res.status(500).json({ message: "An unknown error occurred" });
+  }
+}
 export const getProgressData = async (req: any, res: any):Promise<void> => {
   try {
     if (!req.user|| !req.user.id) {
@@ -53,5 +65,21 @@ export const getProfile = async (req: any, res: any): Promise<void> => {
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getUserById = async (req: any, res: any): Promise<void> => {
+  try {
+    if (!req.user || !req.user.id) {
+      res.status(401).json({ message: "Unauthorized" });
+    }
+    const user = await authService.getUserProfile(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error fetching user by ID:", error);
+    res.status(500).json({ message: "An unknown error occurred" });
   }
 };
