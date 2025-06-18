@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useState } from "react";
 import ky from "ky";
 import { useRouter } from "next/navigation";
+import { getEnvironmentApiUrl } from "@/lib/utils";
 
 export default function RegisterPage() {
   const [name, setname] = useState("");
@@ -25,7 +26,7 @@ export default function RegisterPage() {
         return;
       }
       const res = await ky.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
+        `${getEnvironmentApiUrl()}/auth/signup`,
         {
           json: { name, email, password },
           throwHttpErrors: false, // 🔍 prevent automatic throw on non-2xx

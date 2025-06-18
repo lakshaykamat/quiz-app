@@ -10,8 +10,8 @@ export const createNewQuiz = (data: any) => {
 };
 
 export const getAllQuizzes = async() => {
-  const quizes = await quizRepo.findAllQuizzes();
-  return modifyImagePathInQuizzes(quizes);
+  return await quizRepo.findAllQuizzes();
+  // return modifyImagePathInQuizzes(quizes);
 };
 
 export const getQuizById = async (

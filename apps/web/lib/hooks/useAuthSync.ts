@@ -3,8 +3,9 @@
 import { useEffect } from "react";
 import type { User } from "../store/user-store"; 
 import Cookies from "js-cookie";
-import ky from "ky";
 import { useUserStore } from "@/lib/store/user-store";
+import { getEnvironmentApiUrl } from "../utils";
+import api from "../api";
 
 export const useAuthSync = () => {
   const { setUser, clearUser, setLoading } = useUserStore();
@@ -20,8 +21,8 @@ export const useAuthSync = () => {
     const fetchUser = async () => {
       setLoading(true);
       try {
-        const userData = await ky
-          .get(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
+        const userData = await api
+          .get(`${getEnvironmentApiUrl()}/auth/me`, {
             headers: { Authorization: `Bearer ${token}` },
           })
           .json<User>();

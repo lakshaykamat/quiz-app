@@ -11,3 +11,11 @@ export function getDifficulty(n:number){
   if(n <= 2) return "Hard";
   return "Unknown";
 }
+
+export function getEnvironmentApiUrl(): string {
+  const env = process.env.NEXT_PUBLIC_ENVIRONMENT as string;
+  if (env === 'development') {
+     return 'http://localhost:8000/api/v1';
+  }
+  return process.env.NEXT_PUBLIC_API_URL as string;
+}

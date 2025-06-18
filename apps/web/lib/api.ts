@@ -1,6 +1,8 @@
 import ky from "ky";
+import { get } from "lodash";
+import { getEnvironmentApiUrl } from "./utils";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1/";
+const API_BASE_URL = getEnvironmentApiUrl()
 
 
 // Utility to extract a specific cookie by name

@@ -1,3 +1,4 @@
+import { getEnvironmentApiUrl } from "@/lib/utils";
 import ky from "ky";
 
 export const submitQuiz = async ({
@@ -12,7 +13,7 @@ export const submitQuiz = async ({
   answers: any[];
 }) => {
   try {
-    const res = await ky.post(`${process.env.NEXT_PUBLIC_API_URL}/submission`, {
+    const res = await ky.post(`${getEnvironmentApiUrl()}/submission`, {
       json: {
         userId,
         quizId,

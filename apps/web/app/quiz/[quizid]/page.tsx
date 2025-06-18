@@ -17,7 +17,7 @@ import {
   UserIcon,
 } from "lucide-react";
 import Image from "next/image";
-import { getDifficulty } from "@/lib/utils";
+import { getDifficulty, getEnvironmentApiUrl } from "@/lib/utils";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
@@ -76,7 +76,7 @@ export default function QuizDetailsPage() {
     const fetchQuiz = async () => {
       try {
         const id = extractQuizIdFromSlug(slug);
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/quiz/${id}?questionLimit=-1`;
+        const url = `${getEnvironmentApiUrl()}/quiz/${id}?questionLimit=-1`;
         const res: Quiz = await ky.get(url).json();
         //@ts-ignore
         res.difficulty = getDifficulty(res.difficulty);

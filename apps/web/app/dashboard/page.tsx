@@ -11,6 +11,7 @@ import ProfileCard from "./components/ProfileCard";
 import { useEffect, useState } from "react";
 import ky from "ky";
 import { useRouter } from "next/navigation";
+import { getEnvironmentApiUrl } from "@/lib/utils";
 
 export default function DashboardPage() {
   const { user, isLoading: isUserLoading } = useUserStore();
@@ -22,7 +23,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/quiz`;
+        const url = `${getEnvironmentApiUrl()}/quiz`;
         const res: any = await ky.get(url).json();
         setQuizzes(res);
       } catch (err) {

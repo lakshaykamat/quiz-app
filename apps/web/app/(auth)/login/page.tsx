@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 import { useUserStore } from "@/lib/store/user-store";
+import { getEnvironmentApiUrl } from "@/lib/utils";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -34,7 +35,7 @@ export default function LoginPage() {
         toast.error("Email and password are required.");
         return;
       }
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/auth/login`
+      const url = `${getEnvironmentApiUrl()}/auth/login`
       const res = await ky
         .post(url, {
           json: { email, password },

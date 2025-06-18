@@ -1,5 +1,7 @@
 import ky from "ky";
 import { create } from "zustand";
+import { getEnvironmentApiUrl } from "../utils";
+import api from "../api";
 
 function getTokenFromCookie() {
   return document.cookie
@@ -53,7 +55,7 @@ export const useUserStore = create<UserState>((set) => ({
       if (!token) {
         throw new Error("Token not found in cookies");
       }
-      const userData = await ky.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
+      const userData = await api.get(`${getEnvironmentApiUrl()}/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       }).json<User>();
       userData.xp = Math.round(userData.xp)
